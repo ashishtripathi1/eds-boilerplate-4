@@ -1,0 +1,332 @@
+/* ── Testimonial Carousel ─────────────────────────────────────────────── */
+
+.testimonial-carousel {
+  --tc-bg: #8b7fd4;
+  --tc-accent: #6ecfb0;
+  --tc-text: #fff;
+  --tc-star-filled: #ffd700;
+  --tc-star-empty: rgb(255 255 255 / 25%);
+  --tc-radius: 16px;
+  --tc-slide-padding: 40px 48px;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 960px;
+  margin: 40px auto;
+
+  /* horizontal room for prev/next buttons */
+  padding: 0 52px;
+  outline: none;
+}
+
+/* ── Viewport (scroll-snap container) ──────────────────────────────── */
+
+/* NOTE: intentionally NOT named "testimonial-carousel-wrapper" —
+   EDS auto-generates that class on the outer block wrapper, which would
+   cause overflow+border-radius to clip the whole block incorrectly.
+
+   Using scroll-snap instead of CSS transform+overflow:hidden because
+   a scroll container clips its content natively and reliably across all
+   browsers — no GPU compositing hacks needed. */
+
+.testimonial-carousel-viewport {
+  overflow: clip scroll;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  border-radius: var(--tc-radius);
+  box-shadow: 0 8px 32px rgb(0 0 0 / 18%);
+}
+
+.testimonial-carousel-viewport::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Track ──────────────────────────────────────────────────────────── */
+
+.testimonial-carousel-track {
+  display: flex;
+}
+
+/* ── Individual Slide ───────────────────────────────────────────────── */
+
+.testimonial-carousel-slide {
+  flex: 0 0 100%;
+  min-width: 0;
+  scroll-snap-align: start;
+  background-color: var(--tc-bg);
+  padding: var(--tc-slide-padding);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Decorative opening-quote glyph */
+.testimonial-carousel-slide::before {
+  content: '\201C';
+  position: absolute;
+  top: -16px;
+  left: 28px;
+  font-size: 200px;
+  line-height: 1;
+  color: var(--tc-accent);
+  opacity: 0.2;
+  font-family: Georgia, 'Times New Roman', serif;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ── Content row (text left, image right) ───────────────────────────── */
+
+.testimonial-carousel-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 48px;
+}
+
+/* ── Text column ────────────────────────────────────────────────────── */
+
+.testimonial-carousel-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.testimonial-carousel-quote {
+  margin: 0 0 28px;
+  padding: 0;
+  border: none;
+  color: var(--tc-text);
+  font-size: clamp(1rem, 2.2vw, 1.25rem);
+  line-height: 1.65;
+  font-style: italic;
+}
+
+.testimonial-carousel-attribution {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.testimonial-carousel-author {
+  margin: 0;
+  color: var(--tc-text);
+  font-size: 1rem;
+}
+
+.testimonial-carousel-author strong {
+  font-weight: 700;
+}
+
+.testimonial-carousel-separator {
+  margin: 0 6px;
+  opacity: 0.6;
+}
+
+.testimonial-carousel-company {
+  margin: 0;
+  color: var(--tc-accent);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+}
+
+.testimonial-carousel-rating {
+  margin: 4px 0 0;
+  display: flex;
+  gap: 2px;
+}
+
+.testimonial-carousel-star {
+  font-size: 1.1rem;
+  color: var(--tc-star-empty);
+  line-height: 1;
+}
+
+.testimonial-carousel-star.filled {
+  color: var(--tc-star-filled);
+}
+
+/* ── Author image column ────────────────────────────────────────────── */
+
+.testimonial-carousel-image {
+  flex: 0 0 180px;
+  width: 180px;
+  height: 180px;
+
+  /* Circular clip with inset ring — contained entirely within the div bounds */
+  border-radius: 50%;
+  overflow: hidden;
+  outline: 6px solid rgb(255 255 255 / 20%);
+  outline-offset: -6px;
+  background-color: var(--tc-accent);
+
+  /* Keep image div away from the card edge so it never clips on the wrapper boundary */
+  flex-shrink: 0;
+}
+
+.testimonial-carousel-image picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.testimonial-carousel-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── Prev / Next buttons ────────────────────────────────────────────── */
+
+.testimonial-carousel-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: #fff;
+  color: var(--tc-bg);
+  box-shadow: 0 2px 10px rgb(0 0 0 / 15%);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.testimonial-carousel-nav:hover {
+  background: var(--tc-accent);
+  color: #fff;
+}
+
+.testimonial-carousel-nav:focus-visible {
+  outline: 2px solid var(--tc-accent);
+  outline-offset: 2px;
+}
+
+.testimonial-carousel-prev {
+  left: 4px;
+}
+
+.testimonial-carousel-next {
+  right: 4px;
+}
+
+.testimonial-carousel-nav svg {
+  width: 22px;
+  height: 22px;
+  fill: currentcolor;
+}
+
+/* ── Dot navigation ─────────────────────────────────────────────────── */
+
+.testimonial-carousel-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+}
+
+.testimonial-carousel-dots button {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  background: rgb(139 127 212 / 30%);
+  cursor: pointer;
+  transition: background 0.25s, transform 0.25s;
+}
+
+.testimonial-carousel-dots button.active {
+  background: var(--tc-bg);
+  transform: scale(1.3);
+}
+
+.testimonial-carousel-dots button:focus-visible {
+  outline: 2px solid var(--tc-bg);
+  outline-offset: 3px;
+}
+
+/* ── Mobile  (< 600px) ──────────────────────────────────────────────── */
+
+@media (width < 600px) {
+  .testimonial-carousel {
+    padding: 0 12px;
+    gap: 14px;
+    margin: 24px auto;
+  }
+
+  .testimonial-carousel-slide {
+    padding: 28px 20px 32px;
+  }
+
+  .testimonial-carousel-content {
+    flex-direction: column-reverse;
+    gap: 20px;
+    align-items: flex-start;
+  }
+
+  .testimonial-carousel-image {
+    flex: 0 0 120px;
+    align-self: center;
+    width: 120px;
+    height: 120px;
+  }
+
+  .testimonial-carousel-nav {
+    width: 32px;
+    height: 32px;
+  }
+
+  .testimonial-carousel-prev {
+    left: -8px;
+  }
+
+  .testimonial-carousel-next {
+    right: -8px;
+  }
+}
+
+/* ── Tablet  (600px – 899px) ────────────────────────────────────────── */
+
+@media (width >= 600px) and (width < 900px) {
+  .testimonial-carousel {
+    padding: 0 48px;
+  }
+
+  .testimonial-carousel-image {
+    flex: 0 0 140px;
+    width: 140px;
+    height: 140px;
+    flex-shrink: 0;
+  }
+
+  .testimonial-carousel-content {
+    gap: 32px;
+  }
+}
+
+/* ── Reduced-motion ─────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .testimonial-carousel-viewport {
+    scroll-behavior: auto;
+  }
+
+  .testimonial-carousel-nav {
+    transition: none;
+  }
+
+  .testimonial-carousel-dots button {
+    transition: none;
+  }
+}
